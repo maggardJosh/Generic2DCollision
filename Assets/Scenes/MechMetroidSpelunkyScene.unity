@@ -126,7 +126,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4146128551876724, guid: dde2023f941fe3b4ca4ccd3dd54db68a, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.19
       objectReference: {fileID: 0}
     - target: {fileID: 4146128551876724, guid: dde2023f941fe3b4ca4ccd3dd54db68a, type: 2}
       propertyPath: m_LocalPosition.z
@@ -155,6 +155,10 @@ Prefab:
     - target: {fileID: 1307068333352704, guid: dde2023f941fe3b4ca4ccd3dd54db68a, type: 2}
       propertyPath: m_Name
       value: Ground (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4146128551876724, guid: dde2023f941fe3b4ca4ccd3dd54db68a, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 0.6874996
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: dde2023f941fe3b4ca4ccd3dd54db68a, type: 2}
@@ -262,6 +266,7 @@ GameObject:
   - component: {fileID: 410613556}
   - component: {fileID: 410613555}
   - component: {fileID: 410613554}
+  - component: {fileID: 410613558}
   m_Layer: 5
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -332,6 +337,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &410613558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 410613553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3155fa69068e554395ea03607e31812, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileHeight: 1
+  collisionOffsetValue: 0.01
 --- !u!1001 &756868492
 Prefab:
   m_ObjectHideFlags: 0
@@ -370,6 +388,31 @@ Prefab:
     - target: {fileID: 4946644351189606, guid: 4e0cbec1d0cdd1b419111d31c846a822, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 65099572108183614, guid: 4e0cbec1d0cdd1b419111d31c846a822,
+        type: 2}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 65099572108183614, guid: 4e0cbec1d0cdd1b419111d31c846a822,
+        type: 2}
+      propertyPath: m_Size.y
+      value: 1.6209784
+      objectReference: {fileID: 0}
+    - target: {fileID: 65099572108183614, guid: 4e0cbec1d0cdd1b419111d31c846a822,
+        type: 2}
+      propertyPath: m_Center.y
+      value: 0.31048918
+      objectReference: {fileID: 0}
+    - target: {fileID: 65099572108183614, guid: 4e0cbec1d0cdd1b419111d31c846a822,
+        type: 2}
+      propertyPath: m_Size.x
+      value: 1.8072712
+      objectReference: {fileID: 0}
+    - target: {fileID: 65099572108183614, guid: 4e0cbec1d0cdd1b419111d31c846a822,
+        type: 2}
+      propertyPath: m_Center.x
+      value: 0.40363562
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4e0cbec1d0cdd1b419111d31c846a822, type: 2}
@@ -620,7 +663,13 @@ MonoBehaviour:
   velocity: {x: 0, y: 0, z: 0}
   CollideMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
+  bCollider: {fileID: 1932253443}
+--- !u!65 &1932253443 stripped
+BoxCollider:
+  m_PrefabParentObject: {fileID: 65099572108183614, guid: 4e0cbec1d0cdd1b419111d31c846a822,
+    type: 2}
+  m_PrefabInternal: {fileID: 756868492}
 --- !u!1001 &2133638925
 Prefab:
   m_ObjectHideFlags: 0
