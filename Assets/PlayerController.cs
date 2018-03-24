@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (velocity.y > 0 && !Input.GetKey(KeyCode.Space))
+            velocity.y *= .8f;
         TryMove();
         velocity.y = Mathf.Max(velocity.y - GameSettings.Gravity, GameSettings.MinYVel);
     }
