@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public Vector3 velocity = Vector3.zero;
     public LayerMask CollideMask;
     public BoxCollider bCollider;
+    public float JumpStrength = 10;
 
     // Use this for initialization
     void Start()
@@ -19,6 +20,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         TryMove();
+        velocity.y = Mathf.Max(velocity.y - GameSettings.Gravity, GameSettings.MinYVel);
     }
 
     private void TryMove()
@@ -43,7 +45,7 @@ public class PlayerController : MonoBehaviour
                 //i==1 bottom side corner
                 float ySectionValue = Mathf.Min(i * GameSettings.TileSize, bCollider.size.y - offsetValue * 2f);
                 Ray ray = new Ray(sideCenter + Vector3.up * (bCollider.size.y / 2 - offsetValue) + (Vector3.down * ySectionValue), moveVect);
-                if (Physics.Raycast(ray, out hitResult, Mathf.Abs(moveVelocity.x), CollideMask))
+                if (Physics.Raycast(ray, out hitResult, Mathf.Abs(moveVelocity.x) + offsetValue, CollideMask))
                 {
                     Debug.DrawLine(ray.origin, ray.origin + ray.direction * Mathf.Abs(moveVelocity.x), Color.red, 5f);
                     tempPos = new Vector3(hitResult.point.x - bCollider.center.x, tempPos.y) - moveVect * (bCollider.size.x / 2f);
@@ -76,9 +78,11 @@ public class PlayerController : MonoBehaviour
                 //i==1 right vertical corner
                 float xSectionValue = Mathf.Min(i * GameSettings.TileSize, bCollider.size.x - offsetValue * 2f);
                 Ray ray = new Ray(verticalCenter + Vector3.left * (bCollider.size.x / 2 - offsetValue) + (Vector3.right * xSectionValue), moveVect);
-                if (Physics.Raycast(ray, out hitResult, Mathf.Abs(moveVelocity.y), CollideMask))
+                if (Physics.Raycast(ray, out hitResult, Mathf.Abs(moveVelocity.y) + offsetValue, CollideMask))
                 {
                     Debug.DrawLine(ray.origin, ray.origin + ray.direction * Mathf.Abs(moveVelocity.y), Color.red, 5f);
+                    if (velocity.y < 0)
+                        velocity.y = 0;
                     tempPos = new Vector3(tempPos.x, hitResult.point.y - bCollider.center.y) - moveVect * (bCollider.size.y / 2f);
                 }
                 else
@@ -94,26 +98,21 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-
+        velocity.y = JumpStrength;
     }
 
     // Update is called once per frame
     void Update()
     {
-        velocity = Vector3.zero;
+        velocity.x = 0;
 
         if (Input.GetKey(KeyCode.A))
             velocity += Vector3.left * speed;
         else if (Input.GetKey(KeyCode.D))
             velocity += Vector3.right * speed;
 
-
-        if (Input.GetKey(KeyCode.W))
-            velocity += Vector3.up * speed;
-        else if (Input.GetKey(KeyCode.S))
-            velocity += Vector3.down * speed;
-
         if (Input.GetKeyDown(KeyCode.Space))
             Jump();
+        
     }
 }

@@ -21,6 +21,12 @@ public class GameSettings : MonoBehaviour
     public float collisionOffsetValue = .01f;
     public static float CollisionOffsetValue { get { return Instance.collisionOffsetValue; } }
 
+    public float gravity = .1f;
+    public static float Gravity { get { return Instance.gravity; } }
+
+    public float minYVel = -3f;
+    public static float MinYVel { get { return Instance.minYVel; } }
+
     // Use this for initialization
     void Start()
     {

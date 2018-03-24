@@ -350,6 +350,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileHeight: 1
   collisionOffsetValue: 0.01
+  gravity: 0.8
+  minYVel: -15
 --- !u!1001 &756868492
 Prefab:
   m_ObjectHideFlags: 0
@@ -397,22 +399,22 @@ Prefab:
     - target: {fileID: 65099572108183614, guid: 4e0cbec1d0cdd1b419111d31c846a822,
         type: 2}
       propertyPath: m_Size.y
-      value: 1.6209784
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 65099572108183614, guid: 4e0cbec1d0cdd1b419111d31c846a822,
         type: 2}
       propertyPath: m_Center.y
-      value: 0.31048918
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 65099572108183614, guid: 4e0cbec1d0cdd1b419111d31c846a822,
         type: 2}
       propertyPath: m_Size.x
-      value: 1.8072712
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 65099572108183614, guid: 4e0cbec1d0cdd1b419111d31c846a822,
         type: 2}
       propertyPath: m_Center.x
-      value: 0.40363562
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4e0cbec1d0cdd1b419111d31c846a822, type: 2}
@@ -659,12 +661,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d858ec2e8fa94e443b629d8b18491d69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 8
   velocity: {x: 0, y: 0, z: 0}
   CollideMask:
     serializedVersion: 2
     m_Bits: 256
   bCollider: {fileID: 1932253443}
+  JumpStrength: 18
 --- !u!65 &1932253443 stripped
 BoxCollider:
   m_PrefabParentObject: {fileID: 65099572108183614, guid: 4e0cbec1d0cdd1b419111d31c846a822,
