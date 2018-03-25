@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 
     public float speed = 1.0f;
     public Vector3 velocity = Vector3.zero;
+    public Vector3 moveInput = Vector3.zero;
     public LayerMask CollideMask;
     public BoxCollider bCollider;
     public float JumpStrength = 10;
@@ -16,13 +17,20 @@ public class PlayerController : MonoBehaviour
     {
         bCollider = GetComponent<BoxCollider>();
     }
-
+    float lastMoveInputY = 0;
     private void FixedUpdate()
     {
-        if (velocity.y > 0 && !Input.GetKey(KeyCode.Space))
+        if (moveInput.x != 0)
+            velocity.x = Mathf.Lerp(velocity.x, moveInput.x * speed, .5f);
+        else
+            velocity.x *= .6f;
+        if (moveInput.y > 0 && lastMoveInputY <= 0)
+            Jump();
+        if (velocity.y > 0 && moveInput.y <= 0)
             velocity.y *= .8f;
         TryMove();
         velocity.y = Mathf.Max(velocity.y - GameSettings.Gravity, GameSettings.MinYVel);
+        lastMoveInputY = moveInput.y;
     }
 
     private void TryMove()
@@ -36,21 +44,21 @@ public class PlayerController : MonoBehaviour
             if (moveVelocity.x < 0)
                 moveVect = Vector3.left;
             Vector3 newPos = transform.position + new Vector3(moveVelocity.x, 0);
-            float numSections = bCollider.size.y / GameSettings.TileSize + 1;
+            float numSections = bCollider.bounds.size.y / GameSettings.TileSize + 1;
             float offsetValue = GameSettings.CollisionOffsetValue;
-            Vector3 sideCenter = bCollider.transform.position + bCollider.center + moveVect * (bCollider.size.x / 2 - offsetValue);
+            Vector3 sideCenter = bCollider.transform.position + bCollider.center + moveVect * (bCollider.bounds.size.x / 2 - offsetValue);
 
             for (int i = 0; i <= numSections; i++)
             {
                 Vector3 tempPos = transform.position + new Vector3(moveVelocity.x, 0);
                 //i==0 top side corner
                 //i==1 bottom side corner
-                float ySectionValue = Mathf.Min(i * GameSettings.TileSize, bCollider.size.y - offsetValue * 2f);
-                Ray ray = new Ray(sideCenter + Vector3.up * (bCollider.size.y / 2 - offsetValue) + (Vector3.down * ySectionValue), moveVect);
+                float ySectionValue = Mathf.Min(i * GameSettings.TileSize, bCollider.bounds.size.y - offsetValue * 2f);
+                Ray ray = new Ray(sideCenter + Vector3.up * (bCollider.bounds.size.y / 2 - offsetValue) + (Vector3.down * ySectionValue), moveVect);
                 if (Physics.Raycast(ray, out hitResult, Mathf.Abs(moveVelocity.x) + offsetValue, CollideMask))
                 {
                     Debug.DrawLine(ray.origin, ray.origin + ray.direction * Mathf.Abs(moveVelocity.x), Color.red, 5f);
-                    tempPos = new Vector3(hitResult.point.x - bCollider.center.x, tempPos.y) - moveVect * (bCollider.size.x / 2f);
+                    tempPos = new Vector3(hitResult.point.x - bCollider.center.x, tempPos.y) - moveVect * (bCollider.bounds.size.x / 2f);
                 }
                 else
                 {
@@ -69,23 +77,23 @@ public class PlayerController : MonoBehaviour
             if (moveVelocity.y < 0)
                 moveVect = Vector3.down;
             Vector3 newPos = transform.position + new Vector3(0, moveVelocity.y);
-            float numSections = bCollider.size.x / GameSettings.TileSize + 1;
+            float numSections = bCollider.bounds.size.x / GameSettings.TileSize + 1;
             float offsetValue = GameSettings.CollisionOffsetValue;
-            Vector3 verticalCenter = bCollider.transform.position + bCollider.center + moveVect * (bCollider.size.y / 2 - offsetValue);
+            Vector3 verticalCenter = bCollider.transform.position + bCollider.center + moveVect * (bCollider.bounds.size.y / 2 - offsetValue);
 
             for (int i = 0; i <= numSections; i++)
             {
                 Vector3 tempPos = transform.position + new Vector3(0, moveVelocity.y);
                 //i==0 left vertical corner
                 //i==1 right vertical corner
-                float xSectionValue = Mathf.Min(i * GameSettings.TileSize, bCollider.size.x - offsetValue * 2f);
-                Ray ray = new Ray(verticalCenter + Vector3.left * (bCollider.size.x / 2 - offsetValue) + (Vector3.right * xSectionValue), moveVect);
+                float xSectionValue = Mathf.Min(i * GameSettings.TileSize, bCollider.bounds.size.x - offsetValue * 2f);
+                Ray ray = new Ray(verticalCenter + Vector3.left * (bCollider.bounds.size.x / 2 - offsetValue) + (Vector3.right * xSectionValue), moveVect);
                 if (Physics.Raycast(ray, out hitResult, Mathf.Abs(moveVelocity.y) + offsetValue, CollideMask))
                 {
                     Debug.DrawLine(ray.origin, ray.origin + ray.direction * Mathf.Abs(moveVelocity.y), Color.red, 5f);
                     if (velocity.y < 0)
                         velocity.y = 0;
-                    tempPos = new Vector3(tempPos.x, hitResult.point.y - bCollider.center.y) - moveVect * (bCollider.size.y / 2f);
+                    tempPos = new Vector3(tempPos.x, hitResult.point.y - bCollider.center.y) - moveVect * (bCollider.bounds.size.y / 2f);
                 }
                 else
                 {
@@ -106,15 +114,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        velocity.x = 0;
+        moveInput = Vector3.zero;
 
         if (Input.GetKey(KeyCode.A))
-            velocity += Vector3.left * speed;
+            moveInput = Vector3.left;
         else if (Input.GetKey(KeyCode.D))
-            velocity += Vector3.right * speed;
+            moveInput = Vector3.right;
 
-        if (Input.GetKeyDown(KeyCode.Space))
-            Jump();
-        
+        if (Input.GetKey(KeyCode.Space))
+            moveInput.y = 1;
+
     }
 }
